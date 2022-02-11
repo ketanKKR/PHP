@@ -10,10 +10,10 @@
 	$conn = mysqli_connect($serverName, $userName, $password, $datanase);
 
 	if (!$conn) {
-		die("Connection failed". mysqli_connect_error());
+		die("Connection failed ". mysqli_connect_error());
 	}
 	else{
-		echo "Connected successfully";
+		echo "Connected successfully <br>";
 	}
 ?>
 
@@ -90,15 +90,40 @@
 </html>
 
 <?php
-	$sql = "INSERT INTO `std_data` (`Name`, `City`) VALUES ('$name', '$city');";
-	$result = mysqli_query($conn, $sql);
 
-	if($result){
-		echo "data inserted successfuly <br>";
-	}
-	else{
-		echo "error";
+	if (isset($_POST['add'])){
+		$sql = "INSERT INTO `std_data` (`name`, `city`) VALUES ('$name', '$city');";
+		$result = mysqli_query($conn, $sql);
+
+		if($result){
+			echo "Data inserted successfuly <br>";
+		}
+		else{
+			echo "error";
+		}
 	}
 
-	echo "$id <br> $name <br> $city";
+	if(isset($_POST['delete'])){
+		$sql = "";
+		$result = mysqli_query($conn, $sql);
+
+		if($result){
+			echo "Data deleted successfuly <br>";
+		}
+		else{
+			echo "Error";
+		}
+	}
+
+	if(isset($_POST['update'])){
+		$sql = "";
+		$result = mysqli_query($conn, $sql);
+
+		if($result){
+			echo "Data updated successfuly <br>";
+		}
+		else{
+			echo "Error";
+		}
+	}
 ?>
