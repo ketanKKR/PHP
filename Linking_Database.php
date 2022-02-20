@@ -28,7 +28,7 @@
 	<style type="text/css">
 		.padding{
 			padding: 4px;
-			margin-left: 20%;
+			margin-left: 10%;
 		}
 		body {
  			background-image: url('https://wp-mktg.prod.getty1.net/istockcontentredesign/wp-content/uploads/sites/5/2021/03/2021_iStock_LatestBGTrends_Hero.jpg.jpeg');
@@ -46,6 +46,9 @@
 			border: solid black;
 			border-collapse: collapse;
 			padding: 5px;
+		}
+		#one td{
+			border-right: none;
 		}
 	</style>
 
@@ -76,13 +79,14 @@
 				<td><input type="text" name="stdcity" /></td>
 			</tr>
 		 
-			<tr>
+			<tr id="one">
 				<td colspan=2>
 					<input class="padding" type="submit" name="add" value="Add" />
 					<input class="padding" type="submit" name="delete" value="Delete" />
+					<input class="padding" type="submit" name="update" value="Update" />
+					<input class="padding" type="submit" name="show" value="Show all data" />
 				</td>
-				<td colspan=2><input class="padding" type="submit" name="update" value="Update" />
-				<input class="padding" type="submit" name="select" value="Select" /></td>
+				<td colspan=2><input class="padding" type="submit" name="select" value="Select" /></td>
 			</tr>
 		</table></center>
 	</form>
@@ -92,11 +96,11 @@
 <?php
 
 	if (isset($_POST['add'])){
-		$sql = "INSERT INTO `std_data` (`name`, `city`) VALUES ('$name', '$city');";
+		$sql = "INSERT INTO `std_data` (`id`,`name`, `city`) VALUES ('$id','$name', '$city');";
 		$result = mysqli_query($conn, $sql);
 
 		if($result){
-			echo "Data inserted successfuly <br>";
+			echo '<script>alert(Data inserted successfuly)</script>';
 		}
 		else{
 			echo "error";
@@ -104,11 +108,11 @@
 	}
 
 	if(isset($_POST['delete'])){
-		$sql = "";
+		$sql = "DELETE FROM `std_data` WHERE `id` = '$id' ";
 		$result = mysqli_query($conn, $sql);
 
 		if($result){
-			echo "Data deleted successfuly <br>";
+			echo '<script>alert("Data deleted successfuly")</script>';
 		}
 		else{
 			echo "Error";
@@ -116,7 +120,7 @@
 	}
 
 	if(isset($_POST['update'])){
-		$sql = "";
+		$sql = "UPDATE `std_data` SET `id`='$id',`name`='$name',`city`='$city' WHERE `id` = '$id' ";
 		$result = mysqli_query($conn, $sql);
 
 		if($result){
@@ -125,5 +129,29 @@
 		else{
 			echo "Error";
 		}
+	}
+
+	if(isset($_POST['show'])){
+		$sql = "SELECT `id`, `name`, `city` FROM `std_data`";
+		$result = mysqli_query($conn, $sql);
+
+		if($result){
+			echo "Database table successfully generated as below  <br>";
+		}
+		else{
+			echo "Error";
+		}
+
+		if ($result->num_rows > 0){
+    		echo "<center><table><tr><th>ID</th><th>Name</th><th>City</th></tr>";
+    		// output data of each row
+    		while($row = $result->fetch_assoc()) {
+        		echo "<tr><td>" . $row["id"]. "</td><td>" . $row["name"]. "</td><td>" . $row["city"]. "</td></tr>";
+    		}
+    		echo "</table></center>";
+		}
+		else{
+    		echo "0 results";
+    	}
 	}
 ?>
