@@ -1,19 +1,13 @@
 <?php
-	$serverName = "localHost";
-	$userName = "root";
-	$password = "";
-	$datanase = "std_data";
-	$id = $_POST ['stdid'];
-	$name = $_POST ['stdname'];
-	$city = $_POST ['stdcity'];
+	include 'connect.php';
+	$id = $_GET['id'];
 
-	$conn = mysqli_connect($serverName, $userName, $password, $datanase);
-
-	if (!$conn) {
-		die("Connection failed ". mysqli_connect_error());
+	if($id ?? false){
+		
 	}
 	else{
-		echo "Connected successfully <br>";
+		$id = 1;
+		echo '<a href="Linking_database.php?id='.$row['id'].'"></a>';
 	}
 ?>
 
@@ -29,6 +23,15 @@
 		.padding{
 			padding: 4px;
 			margin-left: 10%;
+		}
+		.padding2{
+			padding: 4px;
+			margin-left: 16%;
+		}
+		a{
+			padding: 5px;
+			border-spacing: 6px;
+			margin-left: 16%;
 		}
 		body {
  			background-image: url('https://wp-mktg.prod.getty1.net/istockcontentredesign/wp-content/uploads/sites/5/2021/03/2021_iStock_LatestBGTrends_Hero.jpg.jpeg');
@@ -47,9 +50,6 @@
 			border-collapse: collapse;
 			padding: 5px;
 		}
-		#one td{
-			border-right: none;
-		}
 	</style>
 
 	<body>
@@ -63,8 +63,12 @@
 				<td>Std ID:</td>
 				<td><input type="text" name="stdid" /></td>
 				<td rowspan="3" colspan="2">
-					<?php 
-						echo "$id <br> $name <br> $city";
+					<?php
+						$result = mysqli_query($conn, "SELECT * FROM std_data WHERE `id`='$id'");
+
+						$row = $result->fetch_assoc();
+
+        				echo "<br>ID: " . $row["id"]. "<br> Name:" . $row["name"]. "<br>City:" . $row["city"];
 					?>
 				</td>
 			</tr> 
@@ -79,14 +83,31 @@
 				<td><input type="text" name="stdcity" /></td>
 			</tr>
 		 
-			<tr id="one">
+			<tr>
 				<td colspan=2>
 					<input class="padding" type="submit" name="add" value="Add" />
 					<input class="padding" type="submit" name="delete" value="Delete" />
 					<input class="padding" type="submit" name="update" value="Update" />
 					<input class="padding" type="submit" name="show" value="Show all data" />
 				</td>
-				<td colspan=2><input class="padding" type="submit" name="select" value="Select" /></td>
+				<td colspan=2>
+					<!--<input class="padding2" type="submit" name="Previous" value="Previous" />-->
+						<?php 
+							$result = mysqli_query($conn, "SELECT * FROM std_data WHERE `id`='$id'");
+
+							// Next button
+							$next = mysqli_query($conn, "SELECT * FROM std_data WHERE id>$id order by id ASC");
+							if($row = mysqli_fetch_array($next)){
+							  echo '<a href="Linking_database.php?id='.$row['id'].'"><button type="button">Next</button></a>';
+							}
+
+							$previous= mysqli_query($conn, "SELECT * FROM std_data WHERE id<$id order by id DESC");
+							if($row = mysqli_fetch_array($previous)){
+							  echo '<a href="Linking_database.php?id='.$row['id'].'"><button type="button">Previous</button></a>';
+							}
+						?>
+					<!--<input class="padding2" type="submit" name="next" value="Next" />-->
+				</td>
 			</tr>
 		</table></center>
 	</form>
@@ -96,6 +117,9 @@
 <?php
 
 	if (isset($_POST['add'])){
+		$id = $_POST ['stdid'];
+		$name = $_POST ['stdname'];
+		$city = $_POST ['stdcity'];
 		$sql = "INSERT INTO `std_data` (`id`,`name`, `city`) VALUES ('$id','$name', '$city');";
 		$result = mysqli_query($conn, $sql);
 
@@ -108,30 +132,57 @@
 	}
 
 	if(isset($_POST['delete'])){
-		$sql = "DELETE FROM `std_data` WHERE `id` = '$id' ";
-		$result = mysqli_query($conn, $sql);
+		$id = $_POST ['stdid'];
+		$name = $_POST ['stdname'];
+		$city = $_POST ['stdcity'];
 
-		if($result){
-			echo '<script>alert("Data deleted successfuly")</script>';
+		if (empty($id)){
+			echo '<script>alert("Plese enter ID to Delete data")</script>';
 		}
 		else{
-			echo "Error";
+			$sql = "DELETE FROM `std_data` WHERE `id` = '$id' ";
+			$result = mysqli_query($conn, $sql);
+
+			if($result){
+				echo '<script>alert("Data deleted successfuly")</script>';
+			}
+			else{
+				echo "Error";
+			}
 		}
 	}
 
 	if(isset($_POST['update'])){
-		$sql = "UPDATE `std_data` SET `id`='$id',`name`='$name',`city`='$city' WHERE `id` = '$id' ";
-		$result = mysqli_query($conn, $sql);
+		$id = $_POST ['stdid'];
+		$name = $_POST ['stdname'];
+		$city = $_POST ['stdcity'];
 
-		if($result){
-			echo "Data updated successfuly <br>";
+		if (empty($id)){
+			echo '<script>alert("Plese enter ID to Upadate data")</script>';
+		}
+		if (empty($name)){
+			echo '<script>alert("Plese enter Name to Update data")</script>';
+		}
+		if (empty($city)){
+			echo '<script>alert("Plese enter City to Update data")</script>';
 		}
 		else{
-			echo "Error";
+			$sql = "UPDATE `std_data` SET `id`='$id',`name`='$name',`city`='$city' WHERE `id` = '$id' ";
+			$result = mysqli_query($conn, $sql);
+
+			if($result){
+				echo "Data updated successfuly <br>";
+			}
+			else{
+				echo "Error";
+			}
 		}
 	}
 
-	if(isset($_POST['show'])){
+	if(isset($_POST['show'])){ 
+		$id = $_POST ['stdid'];
+		$name = $_POST ['stdname'];
+		$city = $_POST ['stdcity'];
 		$sql = "SELECT `id`, `name`, `city` FROM `std_data`";
 		$result = mysqli_query($conn, $sql);
 
@@ -145,7 +196,8 @@
 		if ($result->num_rows > 0){
     		echo "<center><table><tr><th>ID</th><th>Name</th><th>City</th></tr>";
     		// output data of each row
-    		while($row = $result->fetch_assoc()) {
+    		while($row = $result->fetch_assoc()){
+    			echo "<br>";
         		echo "<tr><td>" . $row["id"]. "</td><td>" . $row["name"]. "</td><td>" . $row["city"]. "</td></tr>";
     		}
     		echo "</table></center>";
