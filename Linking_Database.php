@@ -31,26 +31,26 @@
 			box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 		}
 		body{
-            background-color: #E2FFFF;
-        }
-        input[type=submit],button{
-		  background: #5E5DF0;
-		  border-radius: 900px;
-		  box-sizing: border-box;
-		  color: #FFFFFF;
-		  cursor: pointer;
-		  font-size: 16px;
-		  font-weight: 700;
-		  line-height: 24px;
-		  opacity: 1;
-		  outline: 0 solid transparent;
-		  padding: 8px 18px;
-		  user-select: none;
-		  -webkit-user-select: none;
-		  touch-action: manipulation;
-		  width: fit-content;
-		  word-break: break-word;
-		  border: 0;
+            		background-color: #E2FFFF;
+        	}
+	        input[type=submit],button{
+			  background: #5E5DF0;
+			  border-radius: 900px;
+			  box-sizing: border-box;
+			  color: #FFFFFF;
+			  cursor: pointer;
+			  font-size: 16px;
+			  font-weight: 700;
+			  line-height: 24px;
+			  opacity: 1;
+			  outline: 0 solid transparent;
+			  padding: 8px 18px;
+			  user-select: none;
+			  -webkit-user-select: none;
+			  touch-action: manipulation;
+			  width: fit-content;
+			  word-break: break-word;
+			  border: 0;
 		}
 	</style>
 
