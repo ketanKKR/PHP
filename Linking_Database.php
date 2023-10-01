@@ -1,3 +1,6 @@
+<?php
+	$id_found = 0;
+?>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -17,6 +20,8 @@
 		}
 		table{
 			background-color: white;
+			margin-left: auto;
+			margin-right: auto;
 		}
 		th{
 			font-size: 30px;
@@ -31,31 +36,33 @@
 			box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 		}
 		body{
-            		background-color: #E2FFFF;
-        	}
-	        input[type=submit],button{
-			  background: #5E5DF0;
-			  border-radius: 900px;
-			  box-sizing: border-box;
-			  color: #FFFFFF;
-			  cursor: pointer;
-			  font-size: 16px;
-			  font-weight: 700;
-			  line-height: 24px;
-			  opacity: 1;
-			  outline: 0 solid transparent;
-			  padding: 8px 18px;
-			  user-select: none;
-			  -webkit-user-select: none;
-			  touch-action: manipulation;
-			  width: fit-content;
-			  word-break: break-word;
-			  border: 0;
+            background-color: #E2FFFF;
+        }
+        input[type=submit],button{
+		  background: #5E5DF0;
+		  border-radius: 900px;
+		  box-sizing: border-box;
+		  color: #FFFFFF;
+		  cursor: pointer;
+		  font-size: 16px;
+		  font-weight: 700;
+		  line-height: 24px;
+		  opacity: 1;
+		  outline: 0 solid transparent;
+		  padding: 8px 18px;
+		  user-select: none;
+		  -webkit-user-select: none;
+		  touch-action: manipulation;
+		  width: fit-content;
+		  word-break: break-word;
+		  border: 0;
+		}
+		h3{
+			text-align: center;
 		}
 	</style>
 
 	<body>
-		<div>
 
 <?php
 	$serverName = "localHost";
@@ -145,7 +152,7 @@
 	}
 ?>
 		<form method="post">
-			<center><br><table width="60%">
+			<br><table width="60%">
 				<tr>
 					<th colspan="3">Student Data</th>
 				</tr>
@@ -222,18 +229,14 @@
 						?>
 					</td>
 				</tr>
-			</table></center>
+			</table>
 		</form>
 
 		<?php
 			//Add Code
 			if (isset($_POST['add'])){
-				$id = $_POST ['stdid'];
 				$name = $_POST ['stdname'];
 				$city = $_POST ['stdcity'];
-				if (empty($id)){
-					echo '<script>alert("Plese Enter ID to Add Data")</script>';
-				}
 				if (empty($name)){
 					echo '<script>alert("Plese Enter Name to Add Data")</script>';
 				}
@@ -241,11 +244,11 @@
 					echo '<script>alert("Plese Enter City to Add Data")</script>';
 				}
 				else{
-					$sql = "INSERT INTO `std_data` (`id`,`name`, `city`) VALUES ('$id','$name', '$city')";
+					$sql = "INSERT INTO `std_data` (`name`, `city`) VALUES ('$name', '$city')";
 					$result = mysqli_query($conn, $sql);
 
 					if($result){
-						echo '<center><h3>Data Added successfully</h3></center>';
+						echo '<h3>Data Added successfully</h3>';
 					}
 					else{
 						echo "error";
@@ -263,14 +266,21 @@
 					echo '<script>alert("Plese Enter ID to Delete Data")</script>';
 				}
 				else{
-					$sql = "DELETE FROM `std_data` WHERE `id` = '$id' ";
+					$sql = "SELECT id FROM std_data WHERE id=$id;";
 					$result = mysqli_query($conn, $sql);
+					if($result->num_rows > 0){
+						$sql = "DELETE FROM `std_data` WHERE `id` = '$id' ";
+						$result = mysqli_query($conn, $sql);
 
-					if($result){
-						echo '<center><h3>Data Deleted successfully</h3></center>';
+						if($result){
+							echo '<h3>Data Deleted successfully</h3>';
+						}
+						else{
+							echo "Error";
+						}
 					}
 					else{
-						echo "Error";
+						echo "<script>alert('ID Number $id Doesn\'t Exist in Database')</script>";
 					}
 				}
 			}
@@ -284,21 +294,35 @@
 				if (empty($id)){
 					echo '<script>alert("Plese Enter ID to Upadate Data")</script>';
 				}
-				if (empty($name)){
-					echo '<script>alert("Plese Enter Name to Update Data")</script>';
-				}
-				if (empty($city)){
-					echo '<script>alert("Plese Enter City to Update Data")</script>';
-				}
 				else{
-					$sql = "UPDATE `std_data` SET `id`='$id',`name`='$name',`city`='$city' WHERE `id` = '$id' ";
+					$sql = "SELECT id FROM std_data WHERE id=$id;";
 					$result = mysqli_query($conn, $sql);
-
-					if($result){
-						echo '<center><h3>Data Updated successfully</h3></center>';
+					if($result->num_rows > 0){
+						$id_found = 1;
 					}
 					else{
-						echo "Error";
+						$id_found = 0;
+						echo "<script>alert('ID Number $id Doesn\'t Exist in Database')</script>";
+					}
+				}
+
+				if($id_found==1){
+					if (empty($name)){
+						echo '<script>alert("Plese Enter Name to Update Data")</script>';
+					}
+					if (empty($city)){
+						echo '<script>alert("Plese Enter City to Update Data")</script>';
+					}
+					else{
+						$sql = "UPDATE `std_data` SET `id`='$id',`name`='$name',`city`='$city' WHERE `id` = '$id' ";
+						$result = mysqli_query($conn, $sql);
+
+						if($result){
+							echo '<h3>Data Updated successfully</h3>';
+						}
+						else{
+							echo "Error";
+						}
 					}
 				}
 			}
@@ -312,26 +336,24 @@
 				$result = mysqli_query($conn, $sql);
 
 				if($result){
-					echo '<center><h3>Database table successfully generated as below</h3></center>';
+					echo '<h3>Database table successfully generated as below</h3>';
 				}
 				else{
 					echo "Error";
 				}
 
 				if ($result->num_rows > 0){
-		    		echo "<center><table style='margin-top: -10%;'><tr><th>ID</th><th>Name</th><th>City</th></tr>";
+		    		echo "<div><table><tr><th>ID</th><th>Name</th><th>City</th></tr>";
 		    		// output data of each row
 		    		while($row = $result->fetch_assoc()){
-		    			echo "<br>";
 		        		echo "<tr><td>" . $row["id"]. "</td><td>" . $row["name"]. "</td><td>" . $row["city"]. "</td></tr>";
 		    		}
-		    		echo "</table></center><br>";
+		    		echo "</table></div>";
 				}
 				else{
 		    		echo "0 results";
 		    	}
 			}
 		?>
-		</div>
 	</body>
 </html>
