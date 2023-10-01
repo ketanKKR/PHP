@@ -9,37 +9,48 @@
 	<style type="text/css">
 		.padding{
 			padding: 4px;
-			margin-left: 10%;
-		}
-		.padding2{
-			padding: 4px;
-			margin-left: 16%;
+			margin-left: 5%;
 		}
 		button{
 			padding: 5px;
-			margin-left: 10%;
+			margin-left: 5%;
 		}
 		table{
 			background-color: white;
 		}
 		th{
-			background-color: #ee74f2;
 			font-size: 30px;
+			background-color: #4285F4;
+			color: white;
+			text-shadow: 0 0 3px #000000, 0 0 5px #000000;
 		}
 		table,th,td{
 			border: solid black;
 			border-collapse: collapse;
 			padding: 7px;
-		}
-		div{
-			background-image: linear-gradient(to top, #ee74f2, blue);
-			height: 97vh;
+			box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 		}
 		body{
-			background-color: #ee74f2;
-		}
-		h3{
-			color: lightpink;
+            background-color: #E2FFFF;
+        }
+        input[type=submit],button{
+		  background: #5E5DF0;
+		  border-radius: 900px;
+		  box-sizing: border-box;
+		  color: #FFFFFF;
+		  cursor: pointer;
+		  font-size: 16px;
+		  font-weight: 700;
+		  line-height: 24px;
+		  opacity: 1;
+		  outline: 0 solid transparent;
+		  padding: 8px 18px;
+		  user-select: none;
+		  -webkit-user-select: none;
+		  touch-action: manipulation;
+		  width: fit-content;
+		  word-break: break-word;
+		  border: 0;
 		}
 	</style>
 
@@ -60,7 +71,7 @@
 	$sql = "CREATE DATABASE IF NOT EXISTS std_data";
 	$result = mysqli_query($conn, $sql);
 	if($result){
-		echo "<br>Database Created successfully!";
+		
 	}
 	else{
 		echo "Error creating database: " . mysqli_error($conn);
@@ -80,7 +91,7 @@
 	$result = mysqli_query($conn, $sql);
 
 	if($result){
-		echo "<br>Table Created successfully!";
+		
 	}
 	else{
 		echo "Error creating Table: " . mysqli_error($conn);
@@ -119,22 +130,22 @@
 	}
 	
 	
-
-	$id = $_GET['id'];
+	if(isset($_GET['id'])){
+		$id = $_GET['id'];
+	}
 
 	if($id ?? false){
 		
 	}
 	else{
 		$id = 1;
-		if ($row!='') {
+		if(isset($row)){
 			echo '<a href="Linking_database.php?id='.$row['id'].'"></a>';
 		}
-		echo "<h2>The Abow Error is just fine, Navigate database once and the error will be gone</h2>";
 	}
 ?>
 		<form method="post">
-			<center><table width="60%">
+			<center><br><table width="60%">
 				<tr>
 					<th colspan="3">Student Data</th>
 				</tr>
@@ -142,7 +153,7 @@
 				<tr>
 					<td>Std ID:</td>
 					<td><input type="text" name="stdid" /></td>
-					<td rowspan="3" colspan="2">
+					<td rowspan="3" colspan="2" style="font-size: 20px;">
 						<?php
 							$result = mysqli_query($conn, "SELECT * FROM std_data WHERE `id`='$id'");
 							$row = $result->fetch_assoc();
@@ -168,7 +179,7 @@
 						<input class="padding" type="submit" name="add" value="Add" />
 						<input class="padding" type="submit" name="delete" value="Delete" />
 						<input class="padding" type="submit" name="update" value="Update" />
-						<input class="padding" type="submit" name="show" value="Show all data" />
+						<input class="padding" type="submit" name="show" value="Show All Data" />
 					</td>
 					<td colspan=2>
 						<?php 
@@ -308,7 +319,7 @@
 				}
 
 				if ($result->num_rows > 0){
-		    		echo "<center><table><tr><th>ID</th><th>Name</th><th>City</th></tr>";
+		    		echo "<center><table style='margin-top: -10%;'><tr><th>ID</th><th>Name</th><th>City</th></tr>";
 		    		// output data of each row
 		    		while($row = $result->fetch_assoc()){
 		    			echo "<br>";
@@ -321,7 +332,6 @@
 		    	}
 			}
 		?>
-
 		</div>
 	</body>
 </html>
